@@ -5,7 +5,6 @@ import academy.ennate.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -14,22 +13,28 @@ public class EmployeeController {
 
     @Autowired
     private EmployeeService service;
-    @RequestMapping(method = RequestMethod.GET)
-    public List<Employee> findAll(){
-       return service.findAll();
+
+    @RequestMapping(method = RequestMethod.GET, value="getById")
+    public Employee findOne(@RequestParam(name="id") String empId){
+        System.out.println("idddddddd");
+        return service.findOne(empId);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "{id}")
-    public Employee findOne(@PathVariable("id") String empId){
-           return service.findOne(empId);
-    }
-    @RequestMapping(method = RequestMethod.GET, value = "{email}")
-    public Employee findbyEMail(@PathVariable("email") String email){
+    @RequestMapping(method = RequestMethod.GET, value="getByEmail")
+    public Employee findByEmail(@RequestParam(name="email") String email){
+        System.out.println("emaillllllllll");
         return service.findByEmail(email);
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public List<Employee> findAll(){
+        System.out.println("findallllllll");
+        return service.findAll();
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public Employee create(@RequestBody Employee employee){
+        System.out.println("posttttttttt");
         return service.create(employee);
     }
 
