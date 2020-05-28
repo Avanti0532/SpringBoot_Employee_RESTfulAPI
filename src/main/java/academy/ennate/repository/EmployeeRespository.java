@@ -1,15 +1,10 @@
 package academy.ennate.repository;
-
 import academy.ennate.entity.Employee;
-import org.springframework.stereotype.Component;
+import org.springframework.data.repository.CrudRepository;
 
-import java.util.List;
-public interface EmployeeRespository {
+import java.util.Optional;
 
-    List<Employee> findAll();
-    Employee findOne(String id);
-    Employee findByEmail(String email);
-    Employee create(Employee emp);
-    Employee update(String id, Employee emp);
-    void delete(String id);
+
+public interface EmployeeRespository extends CrudRepository<Employee, String> {
+    Optional<Employee> findByEmail(String email);
 }

@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
@@ -18,51 +20,56 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeRespository empRespository;
     @Override
     public List<Employee> findAll() {
-       return empRespository.findAll();
+
+        return (List<Employee>) empRespository.findAll();
     }
 
     @Override
     public Employee findOne(String id) {
-      Employee emp = empRespository.findOne(id);
-        if(emp == null){
+      Optional<Employee> emp = empRespository.findById(id);
+        if(!emp.isPresent()){
             throw new EmployeeNotFound("Employee not found "+id);
         }else{
-            return emp;
+            return emp.get();
         }
     }
 
     @Override
     public Employee findByEmail(String email) {
-        return empRespository.findByEmail(email);
+        Optional<Employee> existing = empRespository.findByEmail(email);
+        if(!existing.isPresent()){
+            throw new BadRequestException("Employee with email: "+email+" already exist");
+        }
+        return existing.get();
     }
 
     @Override
     @Transactional
     public Employee create(Employee emp) {
-        Employee existing = empRespository.findByEmail(emp.getEmail());
-        if(existing!=null){
+        Optional<Employee> existing = empRespository.findByEmail(emp.getEmail());
+        if(!existing.isPresent()){
             throw new BadRequestException("Employee with email: "+emp.getEmail()+" already exist");
         }
-        return empRespository.create(emp);
+        return empRespository.save(emp);
     }
 
     @Override
     @Transactional
     public Employee update(String id, Employee emp) {
-        Employee existing = empRespository.findOne(id);
-        if(existing == null){
+        Optional<Employee> existing = empRespository.findById(id);
+        if(!existing.isPresent()){
             throw new ResourceNotFoundException("Employee with id "+id+" doesn't exist");
         }
-        return empRespository.update(id, emp);
+        return empRespository.save(emp);
     }
 
     @Override
     @Transactional
     public void delete(String id) {
-        Employee existing = empRespository.findOne(id);
-        if(existing == null){
+        Optional<Employee> existing = empRespository.findById(id);
+        if(!existing.isPresent()){
             throw new ResourceNotFoundException("Employee with id "+id+" doesn't exist");
         }
-        empRespository.delete(id);
+        empRespository.delete(existing.get());
     }
 }

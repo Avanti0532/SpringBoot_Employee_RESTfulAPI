@@ -3,10 +3,6 @@ package academy.ennate.entity;
 import java.util.UUID;
 import javax.persistence.*;
 @Entity
-@NamedQueries({
-        @NamedQuery(name="Employee.findAll", query = "SELECT emp FROM Employee emp ORDER BY emp.email"),
-        @NamedQuery(name="Employee.findByEmail", query = "SELECT emp FROM Employee emp WHERE emp.email=:paramEmail")
-})
 public class Employee {
     @Id
     @Column(columnDefinition = "VARCHAR(36)")
