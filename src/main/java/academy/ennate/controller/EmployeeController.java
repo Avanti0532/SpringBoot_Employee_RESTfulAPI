@@ -2,7 +2,6 @@ package academy.ennate.controller;
 
 import academy.ennate.entity.Employee;
 import academy.ennate.service.EmployeeService;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
